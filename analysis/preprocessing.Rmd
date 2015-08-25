@@ -1,0 +1,595 @@
+---
+subtitle: "Vorprozessierung und Analyse"
+title: "Export von militärisch verwendbaren Gütern"
+author: "SRF Data, Timo Grossenbacher (timo.grossenbacher@srf.ch)"
+date: "04/08/2015"
+output: html_document
+---
+
+### Vorbemerkungen
+
+Dieses Dokument beschreibt die Vorprozessierung und explorative Analyse des Datensatzes, der unter [srf.ch interaktiv visualisiert](http://www.srf.ch/news/schweiz/notrecht-als-letztes-mittel-gegen-heikle-ruestungsexporte) und unter [diesem Link](http://www.srfcdn.ch/srf-data/data/2015/seco-dual-use/data/seco_dual_use.csv) als CSV-Datei zum Download angeboten wird.
+
+SRF Data legt Wert darauf, dass die Datenvorprozessierung und -Analyse nachvollzogen und überprüft werden kann. SRF Data glaubt an das Prinzip offener Daten, aber auch offener und nachvollziehbarer Methoden. Zum anderen soll es Dritten ermöglicht werden, auf dieser Vorarbeit aufzubauen und damit weitere Auswertungen oder Applikationen zu generieren.  
+
+Die Vorprozessierung und Analyse wurde im Statistikprogramm R vorgenommen. Die Endprodukte des verwendeten Scripts sind:
+
+* `output/seco_dual_use_for_vis.csv`: Wird für die Visualisierung verwendet, reduzierte Menge von Attributen
+* `output/seco_dual_use.csv`: Vollständiger Datensatz, der zum Download angeboten wird. Dieser Datensatz wird im folgenden Kapitel beschrieben. 
+
+#### R-Script
+
+Das zugrunde liegende Script kann unter [diesem Link](http://srfdata.github.io/1503-seco-dual-use-goods/rscript.zip) heruntergeladen werden. Durch Ausführen von `preprocessing.Rmd` kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner `input` eingelesen und Ergebnisse in den Ordner `output` geschrieben. 
+
+#### Haftungsauschluss
+
+Die veröffentlichten Informationen sind sorgfältig zusammengestellt, erheben aber keinen Anspruch auf Aktualität, Vollständigkeit oder Richtigkeit. Es wird keine Haftung übernommen für Schäden, die  durch die Verwendung dieses Scripts oder der daraus gezogenen Informationen entstehen. Dies gilt ebenfalls für Inhalte Dritter, die über dieses Angebot zugänglich sind. 
+
+### Datenbeschreibung
+
+Es folgt eine Beschreibung des unter [diesem Link](http://www.srfcdn.ch/srf-data/data/2015/seco-dual-use/data/seco_dual_use.csv) vom Staatssekretariat für Wirtschaft (SECO) publizierten Datensatzes: 
+
+| Attribut | Typ | Beschreibung | 
+|-------|------|---------|
+| (Erste Spalte, keine Bezeichnung)  | Integer  | Identifikator, eindeutig.    |
+|  GN  |  Integer |   Geschäftsnummer in der Seco-Datenbank, zwei unterschiedliche Formate je nach *Herkunfstdatei*.   |
+|    UnterGN  |    Integer |     Durchnummerierung von Geschäften mit gleicher *GN*.   |
+|    Datum  |    Date |     Datum der Bewilligung im Format YYYY-MM-DD.  |
+|    Land  |    String |     Land, in das die Güter exportiert werden.  |
+|    Wert  |    Float |     Wert der Güter in Schweizer Franken.   |
+|    Verzeichnis  |    String |     Kürzel für Verzeichnis, siehe unten.   |
+|    Signatur  |    String |     Code, der die Kategorie/Art der gehandelten Güter kodiert, aufgeschlüsselt in *Haupttyp*, *Untertyp*, *Zusatz*, siehe Beispiel unten. Achtung: Es kann sein, dass ein Geschäft zwei Signaturen aufweist. Dann wird nur die erste zur Ermittelung der Teilsignaturen verwendet.   |
+|    Haupttyp  |    String |     Erste Hierarchiestufe der *Signatur*, entspricht Überkategorien in den einzelnen *Verzeichnis*sen.  |
+|    Untertyp  |    String |     Zweite Hierarchiestufe der *Signatur*, entspricht Unterkategorien in den einzelnen *Verzeichnis*sen. |
+|    Zusatz  |    String |     Rest der *Signatur*.  |
+|    Herkunftsdatei  |    String |     Originaldatei auf [der Website des SECO](http://www.seco.admin.ch/themen/00513/00600/00608/05564/index.html?lang=de&download=NHzLpZeg7t,lnp6I0NTU042l2Z6ln1acy4Zn4Z2qZpnO2Yuq2Z6gpJCGeH13gmym162epYbg2c_JjKbNoKSn6A--)  |
+
+#### Attribut *Verzeichnis*
+
+Folgende Werte sind möglich:
+
+* 5.1: Güter die dem Waffengesetz unterliegen
+* 5.2: Zivile Sprengstoffe
+* ChKV: Chemikalien der Chemikalienkontrollverordnung
+* GKV: Güter des Anhangs 1 + 2 der Güterkontrollverordnung, sogenannte "Dual-Use-Güter"
+* ML (GKV): "Besondere militärische Güter", ebenfalls Teil der GKV
+* unbekannt 
+
+Die in der Visualisierung mit hochgestellten Buchstaben referenzierte Zusammenfassung der Verzeichnisse ("Dual-Use-Güter", "Besondere militärische Güter" und "Andere Güter") wurde von SRF Data vorgenommen und ist unter `output/verzeichnis_beschreibung.csv` einsehbar. 
+
+#### Attribut *Haupttyp*
+
+Die in der Visualisierung dargestellte "Kategorie" entspricht dem *Haupttyp*. Die Übersetzung von *Haupttyp* wurde von SRF Data basierend auf amtlichen Dokumenten (Verordnungen, Verzeichnisse) vorgenommen und ist unter `output/signatures_verzeichnis_haupttyp_beschreibung.csv` einsehbar. 
+
+#### Beispiel Signaturaufschlüsselung
+
+GKV 6A002.c1 ergibt...
+
+* *Haupttyp*: 6 ("Sensoren und Laser")
+* *Untertyp*: A ("Ausrüstungen, Baugruppen, Bestandteile")
+* *Zusatz*: 002.c1
+
+In der Gesamtheit: "Ausrüstung zur 'direkten Bildwandlung' mit eingebauten Bildverstärkerröhren" (gemäss Anhang 1 + 2 GKV, 2012).
+
+### Hinweis zu Mehrfachbewilligungen
+
+Laut Aussage des SECO kann die veröffentlichte Bewilligungs-Datenbank Mehrfachbewilligungen enthalten. Gewisse Aufträge sind so umfassend, dass ihre Ausführung mehrere Jahre dauert. Weil eine Exportbewilligung aber nur ein Jahr gültig ist, tauchen in den Daten vereinzelt auch Geschäfte auf, die schon vor 2012 bewilligt wurden. Solche Mehrfachbewilligungen führen dazu, dass Aufträge in der Statistik mehrfach vorkommen können.
+
+Vom SECO wurde SRF Data eine Liste mit Geschäften übergeben, die schon vor 2012 erstmals bewilligt wurden und ihren Weg wiederum in die Datenbank fanden. Es handelt sich um folgende Geschäftsnummern:
+
+| Geschäftsnummer | Beschreibung | Auftragsvolumen |
+|-------|------|---------|
+| 8001226 (ELIC) | Flugzeuge und Simulatoren nach Indien | rund 155 Mio. CHF |
+| 14476 | Flugzeuge nach Indien | rund 165 Mio. CHF |
+| 16043 | Flugzeuge nach Indien | rund 80 Mio. CHF |
+| 12332 | Flugzeuge nach Saudi-Arabien | rund 1 Mia. CHF |
+| 8001302 (ELIC) | Simulatoren nach Katar |rund 345 Mio. CHF |
+
+### Vorbereitungen
+
+#### Packages installieren
+```{r}
+if(!require(dplyr)) {
+  install.packages("dplyr", repos="http://cran.us.r-project.org")
+  require(dplyr)
+}
+if(!require(tidyr)) {
+  install.packages("tidyr", repos="http://cran.us.r-project.org")
+  require(tidyr)
+}
+if(!require(ggplot2)) {
+  install.packages("ggplot2", repos="http://cran.us.r-project.org")
+  require(ggplot2)
+}
+if(!require(xlsx)) {
+  install.packages("xlsx", repos="http://cran.us.r-project.org")
+  require(xlsx)
+}
+```
+
+#### Sonstige Optionen und eigene Sourcen (Hilfsdateien)
+```{r}
+require(scales)
+options(scipen = 999)
+# Funktion zur Klassifikation von Signaturen
+source("classify.r")
+# Funktion zum Formatieren von Zahlen
+source("numberFormatter.r")
+```
+
+
+### Datenquellen
+
+Im folgenden werden zwei Rohdatensätze verwendet, die ursprünglich als XLS vorliegen .
+
+* Tracker: [SECO Tracker Applikation](http://www.seco.admin.ch/themen/00513/00600/00608/05564/index.html?lang=de&download=NHzLpZeg7t,lnp6I0NTU042l2Z6ln1acy4Zn4Z2qZpnO2Yuq2Z6gpJCGeH19gmym162epYbg2c_JjKbNoKSn6A--)
+* ELIC: [SECO ELIC](http://www.seco.admin.ch/themen/00513/00600/00608/05564/index.html?lang=de&download=NHzLpZeg7t,lnp6I0NTU042l2Z6ln1acy4Zn4Z2qZpnO2Yuq2Z6gpJCGeH12gWym162epYbg2c_JjKbNoKSn6A--)
+
+Eine Datenbeschreibung der Rohdaten findet sich [hier](http://www.seco.admin.ch/themen/00513/00600/00608/05564/index.html?lang=de&download=NHzLpZeg7t,lnp6I0NTU042l2Z6ln1acy4Zn4Z2qZpnO2Yuq2Z6gpJCGeH13gmym162epYbg2c_JjKbNoKSn6A--).
+
+### Vorprozessierung
+
+#### Daten reinladen und typisieren
+```{r}
+# Die Dateien können leider nicht automatisch heruntergeladen werden. Es wird vorausgesetzt, dass sich die beiden Files tracker.xlsx und elic.xlsx im Ordner input befinden. Die beiden Dateien können über die Links oben bezogen werden.
+# ACHTUNG: Das Reinladen der XLSX-Dateien dauert seine Zeit...
+tracker_raw <- read.xlsx(file = "input/tracker.xlsx", sheetIndex = 1, colClasses = "character", stringsAsFactors = F)
+# Spaltentypen setzen und umbenennen
+tracker_raw <- tracker_raw %>%
+  mutate(Bewilligungsdatum = as.Date(Bewilligungsdatum, "%Y-%m-%d"), Geschäftsnummer = as.integer(Geschäftsnummer), Wert = as.numeric(Wert)) %>%
+  rename(GN = Geschäftsnummer, Datum = Bewilligungsdatum, Land = Endverbraucherland)
+
+# überprüfen
+str(tracker_raw)
+
+elic_raw <- read.xlsx(file = "input/elic.xlsx", sheetIndex = 1, colClasses = "character", stringsAsFactors = F)
+# Spaltentypen setzen und umbenennen
+elic_raw <- elic_raw %>%
+  mutate(Ausstellungsdatum = as.Date(Ausstellungsdatum, "%d.%m.%Y"), Geschäftsnummer = as.integer(Geschäftsnummer), Position...Wert..CHF. = as.numeric(Position...Wert..CHF.)) %>%
+  rename(GN = Geschäftsnummer, Datum = Ausstellungsdatum, Land = Bestimmungs..Lieferland, Wert = Position...Wert..CHF.)
+
+# überprüfen
+str(elic_raw)
+```
+
+#### Duplikate 
+Duplikate: Mehrere Einträge unter der gleichen Geschäftsnummer
+
+Wie viele "Duplikate" gibt es? 
+```{r}
+dim(tracker_raw)[1] - dim(distinct(select(tracker_raw, GN)))[1]
+dim(elic_raw)[1] - dim(distinct(select(elic_raw, GN)))[1]
+```
+Diese werden nicht aggregiert sondern so belassen, jedoch durchnummiert (Generierung neue Spalte UnterGN)
+
+```{r}
+tracker_summarized <- tracker_raw %>%
+  group_by(GN, Datum, Land) %>%
+  mutate(UnterGN = row_number())
+elic_summarized <- elic_raw %>%
+  group_by(GN, Datum, Land) %>%
+  mutate(UnterGN = row_number())
+```
+
+
+Wie viele Einträge haben in der Tracker-Applikation zwei Signaturen? 
+```{r}
+
+dim(filter(tracker_summarized, NSGII..GKV. != "", WA..GKV. != ""))[1]
+```
+
+Wie viele davon sind solche, die mit der gleichen Obersignatur (sprich: dem gleichen Haupt- und Untertyp, siehe unten) beginnen? 
+```{r}
+dim(filter(tracker_summarized, NSGII..GKV. != "", WA..GKV. != "", substr(NSGII..GKV.,1,2) == substr(WA..GKV.,1,2)))[1]
+```
+
+Wie viele Geschäfte haben keine Signatur? 
+```{r}
+tracker_without_signature <- tracker_summarized %>% 
+  gather(Variable, Value, AG..GKV.:ChKV) %>% 
+  group_by(GN, Datum, Land, UnterGN) %>%
+  filter(all(is.na(Value) | Value == "NA")) %>% 
+  slice(1)
+dim(tracker_without_signature)[1]
+```
+ELIC?
+```{r}
+dim(elic_summarized[elic_summarized$Position...EKN == "",])[1]
+```
+
+#### Restrukturieren
+```{r}
+# ELIC: Umbenennen und Spalte hinzufügen
+elic_restructured <- elic_summarized %>%
+  rename(Signatur = Position...EKN, "Verordnung/Typ ELIC" = Position...Güterart) %>%
+  mutate("Verordnung/Typ" = NA)
+
+# Tracker: Kondensieren (breit nach lang)
+tracker_restructured <- tracker_summarized %>% 
+  gather(Variable, Value, AG..GKV.:ChKV) %>%                          # breit nach lang
+  group_by(GN, Datum, Land, UnterGN) %>% 
+  filter(if(all(is.na(Value) | Value == "NA")) row_number() == 1 else (!is.na(Value) | Value == "NA")) %>% # wenn Geschäft gar keine Signatur hat, dann nur den ersten nehmen, sonst alle nehmen, die einen Wert haben (für solche, die mehr als eine Signatur haben)
+  summarise_each(funs(paste(unique(.), collapse = "\n")))  %>%        # alle eindeutigen Werte pro Gruppe mit einem newline-Operator zusammenfügen
+  mutate(Wert = as.numeric(Wert))                                     # Wert muss numerisch sein
+
+# Tracker: Einträge, für die keine Signatur bekannt ist, umbenennen, und eine leere Spalte für Kombination mit ELIC hinzufügen, sowie Spalten umbennenen
+tracker_restructured <- tracker_restructured %>%
+  mutate(Variable = ifelse(is.na(Value) | Value == "NA","unbekannt", Variable), Value = ifelse(is.na(Value) | Value == "NA","unbekannt", Value), "Verordnung/Typ ELIC" = NA) %>%
+  rename("Verordnung/Typ" = Variable, "Signatur" = Value)
+
+```
+Zwischenbilanz
+```{r}
+str(as.data.frame(elic_restructured))
+str(as.data.frame(tracker_restructured))
+```
+
+#### Beide Datensätze kombinieren
+```{r}
+seco_dual_use <- rbind(as.data.frame(elic_restructured), as.data.frame(tracker_restructured))
+str(seco_dual_use)
+```
+
+#### Länder-Duplikate entfernen
+Wie viele Länder gibt es? 
+```{r}
+laender <- arrange(seco_dual_use, Land)
+# unique(laender$Land) # der Lesbarkeit halber auskommentiert
+length(unique(laender$Land))
+```
+Manuell umschreiben gemäss SRF-Länderliste, und falls dort nicht spezifiziert, gemäss NZZ-Vademecum
+```{r}
+seco_dual_use$Land[seco_dual_use$Land == "Bosnien und Herzegowina"] <- "Bosnien-Herzegowina"
+seco_dual_use$Land[seco_dual_use$Land == "Pakistan (CA)"] <- "Pakistan"
+seco_dual_use$Land[seco_dual_use$Land == "Indien (CA)"] <- "Indien"
+seco_dual_use$Land[seco_dual_use$Land == "China, Taiwan"] <- "Taiwan"
+seco_dual_use$Land[seco_dual_use$Land == "China, Volksrepublik"] <- "China"
+seco_dual_use$Land[seco_dual_use$Land == "Ekuador"] <- "Ecuador"
+seco_dual_use$Land[seco_dual_use$Land == "Großbritannien (Vereinigtes Königreich)"] <- "Grossbritannien"
+seco_dual_use$Land[seco_dual_use$Land == "Hongkong"] <- "Hong Kong"
+seco_dual_use$Land[seco_dual_use$Land == "Iran, Islamische Republik"] <- "Iran"
+seco_dual_use$Land[seco_dual_use$Land == "Iran, Islamische Republik (SG)"] <- "Iran"
+seco_dual_use$Land[seco_dual_use$Land == "Myanmar (Union)"] <- "Myanmar (Birma)"
+seco_dual_use$Land[seco_dual_use$Land == "Qatar"] <- "Katar"
+seco_dual_use$Land[seco_dual_use$Land == "Serbia"] <- "Serbien"
+seco_dual_use$Land[seco_dual_use$Land == "Slowakei, Slowakische Republik"] <- "Slowakische Republik"
+seco_dual_use$Land[seco_dual_use$Land == "Taiwan, Provinz von China"] <- "Taiwan"
+seco_dual_use$Land[seco_dual_use$Land == "Vereinigte Staaten"] <- "Vereinigte Staaten von Amerika"
+seco_dual_use$Land[seco_dual_use$Land == "Libysch-Arabische Dschamahirija"] <- "Libyen"
+seco_dual_use$Land[seco_dual_use$Land == "Russische Föderation"] <- "Russland"
+seco_dual_use$Land[seco_dual_use$Land == "Belarus"] <- "Weissrussland"
+seco_dual_use$Land[seco_dual_use$Land == "Bangladesch"] <- "Bangladesh"
+seco_dual_use$Land[seco_dual_use$Land == "Bermuda"] <- "Bermudas"
+seco_dual_use$Land[seco_dual_use$Land == "Brunei Darussalam"] <- "Brunei"
+seco_dual_use$Land[seco_dual_use$Land == "Demokratische Republik Kongo"] <- "Kongo-Kinshasa"
+seco_dual_use$Land[seco_dual_use$Land == "Kongo, Demokratische Republik (ex-Zaire)"] <- "Kongo-Kinshasa"
+seco_dual_use$Land[seco_dual_use$Land == "Cayman-Inseln"] <- "Kaiman-Inseln"
+seco_dual_use$Land[seco_dual_use$Land == "Korea, Republik"] <- "Südkorea"
+seco_dual_use$Land[seco_dual_use$Land == "Kroatien (Hrvatska)"] <- "Kroatien"
+seco_dual_use$Land[seco_dual_use$Land == "Laos, Demokratische Volksrepublik"] <- "Laos"
+seco_dual_use$Land[seco_dual_use$Land == "Macao"] <- "Macau"
+seco_dual_use$Land[seco_dual_use$Land == "Mazedonien, die ehemalige jugoslawische Republik"] <- "Mazedonien"
+seco_dual_use$Land[seco_dual_use$Land == "Myanmar (Birma)"] <- "Myanmar"
+seco_dual_use$Land[seco_dual_use$Land == "Slowakische Republik"] <- "Slowakei"
+seco_dual_use$Land[seco_dual_use$Land == "Tansania, Vereinigte Republik"] <- "Tansania"
+seco_dual_use$Land[seco_dual_use$Land == "Tschechische Republik"] <- "Tschechien"
+seco_dual_use$Land[seco_dual_use$Land == "Vereinigte Staaten von Amerika"] <- "USA"
+```
+
+Wie viele Länder gibt es jetzt noch? 
+```{r}
+length(unique(seco_dual_use$Land))
+```
+
+#### Kategorisierung
+Neue Spalten erstellen
+```{r}
+# Spalte für Dateiherkunft
+seco_dual_use <- seco_dual_use %>%
+  mutate(Herkunftsdatei = NA, Verzeichnis = NA, Haupttyp = NA, Untertyp = NA, Zusatz = NA)
+```
+Signaturaufschlüsselung
+```{r}
+# Verzeichnis fin
+computedList <- mapply(classifyVerzeichnis, seco_dual_use[,"Verordnung/Typ"], seco_dual_use[,"Verordnung/Typ ELIC"], seco_dual_use[,"Signatur"])
+
+seco_dual_use <- seco_dual_use  %>% 
+  mutate(Verzeichnis = as.factor(t(computedList)[,1]), Herkunftsdatei = as.factor(t(computedList)[,2]))
+
+# Verordnung/Typ (ELIC) werden nicht mehr gebraucht
+seco_dual_use <- seco_dual_use  %>% 
+  select(-contains("Verordnung/Typ"))
+
+# Signatur aufschlüsseln
+# nur GVK anzeigen
+seco_dual_use_only_gkv <- seco_dual_use  %>% 
+  filter(Verzeichnis == "GKV") %>%
+  select(Signatur, Herkunftsdatei)
+
+computedList <- mapply(classifySignatur, seco_dual_use[,"Verzeichnis"], seco_dual_use[,"Herkunftsdatei"], seco_dual_use[,"Signatur"])
+
+seco_dual_use_cleaned <- seco_dual_use  %>% 
+  mutate(Haupttyp = as.factor(t(computedList)[,1]), Untertyp = as.factor(t(computedList)[,2]), Zusatz = as.factor(t(computedList)[,3]))
+
+# Sample nehmen, um Klassifikation zu überprüfen
+seco_dual_use_cleaned  %>% 
+  sample_n(40) %>%
+  select(Verzeichnis, Signatur, Haupttyp, Untertyp, Zusatz)
+
+# Faktorenlevels überprüfen
+levels(seco_dual_use_cleaned$Verzeichnis)
+levels(seco_dual_use_cleaned$Herkunftsdatei)
+# Hier gibt es Einträge à la 1A, 2B und 3B, dies sind keine Fehler, sondern Haupttypen der ChKV
+levels(seco_dual_use_cleaned$Haupttyp)
+levels(seco_dual_use_cleaned$Untertyp)
+levels(seco_dual_use_cleaned$Zusatz)
+
+```
+
+
+#### Plausibilitätsüberprüfungen
+
+Was sind die kleinsten Einträge auf der Liste, das heisst: Wie viele Geschäfte im Wert von 1 Franken gibt es? Wie viele Geschäfte unter 1'000 Franken gibt es? 
+Wie viele Geschäfte unter 10'000 Franken gibt es? Wie viele Geschäfte unter 100'000 Franken gibt es? 
+```{r}
+dim(seco_dual_use_cleaned[seco_dual_use_cleaned$Wert == 1,])[1]
+dim(seco_dual_use_cleaned[seco_dual_use_cleaned$Wert <= 1000,])[1]
+dim(seco_dual_use_cleaned[seco_dual_use_cleaned$Wert <= 10000,])[1]
+dim(seco_dual_use_cleaned[seco_dual_use_cleaned$Wert <= 100000,])[1]
+
+```
+
+#### Output als CSV
+```{r}
+# Spalten neu ordnen
+seco_dual_use_cleaned <- seco_dual_use_cleaned %>%
+  select(GN, UnterGN, Datum, Land, Wert, Verzeichnis, Signatur, Haupttyp, Untertyp, Zusatz, Herkunftsdatei)
+# \n durch | ersetzen in Signatur
+seco_dual_use_cleaned_for_output <- seco_dual_use_cleaned %>%
+  mutate(Signatur = sub("\\n", "|", Signatur)) %>%
+  mutate(Untertyp = ifelse(is.na(Untertyp), "", as.character(Untertyp))) %>%
+  mutate(Haupttyp = ifelse(is.na(Haupttyp), "", as.character(Haupttyp))) %>%
+  mutate(Zusatz = ifelse(is.na(Zusatz), "", as.character(Zusatz)))
+write.csv(seco_dual_use_cleaned_for_output, file = "output/seco_dual_use.csv")
+
+# Output für Visualisierung
+# Benötigt: Datum, Land, Wert, Verzeichnis, Haupttyp
+seco_dual_use_for_vis <- seco_dual_use_cleaned %>%
+  select(Datum, Land, Wert, Verzeichnis, Haupttyp) %>%
+  mutate(Haupttyp = as.character(Haupttyp))
+# Chemikalien zusammenfassen
+seco_dual_use_for_vis$Haupttyp[seco_dual_use_for_vis$Verzeichnis == "ChKV"] <- "0"
+# NAs durch leere Strings ersetzen
+seco_dual_use_for_vis$Haupttyp[is.na(seco_dual_use_for_vis$Haupttyp)] <- ""
+write.csv(seco_dual_use_for_vis, file = "output/seco_dual_use_for_vis.csv", row.names = F, quote = c(1, 2, 4, 5))
+```
+
+Output aller unterschiedlichen Signaturen als CSV
+```{r}
+write.csv(data.frame(signatures = unique(paste(seco_dual_use_cleaned$Verzeichnis, seco_dual_use_cleaned$Haupttyp, seco_dual_use_cleaned$Untertyp, seco_dual_use_cleaned$Zusatz))), "output/all_signatures.csv")
+```
+
+Output aller unterschiedlichen Verzeichnis-Haupttyp-Kategorien zur manuellen Beschreibung
+```{r}
+only_top_category_signatures <- seco_dual_use_cleaned %>%
+  select(Verzeichnis, Haupttyp) %>%
+  distinct() %>%
+  mutate(Beschreibung = "", Haupttyp = as.character(Haupttyp)) %>%
+  arrange(Verzeichnis, Haupttyp)
+write.csv(only_top_category_signatures, "output/signatures_verzeichnis_haupttyp.csv", row.names = F)
+```
+
+### Analyse
+#### Generelles
+
+Wie sieht die Verteilung aus? 
+```{r}
+cdf <- ggplot(seco_dual_use_cleaned, aes(x = Wert)) + stat_ecdf() + scale_x_log10(labels = formatAsChfWithoutCHF) + scale_y_continuous(labels = percent)
+cdf
+```
+
+Wie viel Prozent des Exportvolumens sind Kleinaufträge oder Exporte zu Testzwecken (Definition gemäss SECO: Geschäfte mit einem Wert von unter 10'000 Franken)?
+```{r}
+seco_dual_use %>%
+  group_by("Unter 10'000" = Wert < 10000, "Zwischen 10'000 und 100'000" = Wert < 100000 & Wert >= 10000, "Zwischen 100'000 und 1 Mio." = Wert >= 100000 & Wert < 1000000, "Zwischen 1 Mio. und 10 Mio." = Wert >= 1000000 & Wert < 10000000, "Über 10 Mio." = Wert >= 10000000) %>%
+  summarise(Summe = sum(Wert), Anzahl = n()) %>%
+  mutate(Summenanteil = Summe / sum(seco_dual_use_cleaned$Wert)) %>%
+  gather(Kategorie, Value, -Summe, -Summenanteil, -Anzahl) %>%
+  filter(Value == T) %>%
+  select(-Value)
+# Sonstige Kennzahlen
+
+seco_dual_use %>%
+  summarise(median = formatAsChf(median(Wert)), sd = formatAsChf(sd(Wert)), mean = formatAsChf(mean(Wert)))
+```
+
+Es zeigt sich klar, dass Exporte mit kleinen Summen nur einen verschwindend kleinen Teil des gesamten Exportvolumens ausmachen (< 2 Prozent). Exporte zu Testzwecken oder temporäre Exporte fallen bei der nachfolgenden Analyse rein rechnerisch also nicht ins Gewicht. Geschäfte mit einem Handelswert von über 10 Mio. sind für rund 60 Prozent des Exportvolumens verantwortlich. 
+
+Exporte im Wert von wie vielen Franken wurden im untersuchten Zeitraum bewilligt? 
+```{r}
+formatAsChf(sum(seco_dual_use_cleaned$Wert))
+```
+
+Was sind die grössten Exporte auf der Liste? 
+```{r}
+arrange(seco_dual_use_cleaned, desc(Wert)) %>%
+  mutate(Wert = formatAsChf(Wert)) %>%
+  select(GN, Land, Verzeichnis, Datum, Wert) %>%
+  slice(1:10) 
+```
+
+Mit welchen 10 Ländern wird am meisten gehandelt?
+```{r}
+laenderSummen10Sortiert <- seco_dual_use_cleaned %>%
+  group_by(Land) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  slice(1:10)
+laenderAndere <- seco_dual_use_cleaned %>%
+  group_by(Land) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  slice(11:n()) %>%
+  summarise(Land = "Andere", Wert = sum(Wert))
+
+# Summe der sonstigen
+
+laenderSummen10SortiertForBar <- rbind(laenderSummen10Sortiert, laenderAndere) %>%
+  mutate(Land = factor(Land, levels = c(laenderSummen10Sortiert$Land, laenderAndere$Land))) # in die richtige Reihenfolge bringen
+
+laenderSummenBar <- ggplot(data = laenderSummen10SortiertForBar, aes(x = Land, y = Wert)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Land") +
+  theme(axis.text.x = element_text(angle=45, vjust=0.5))
+laenderSummenBar
+```
+
+Wie viel Prozent des Exportvolumens fallen auf die 5 Länder mit dem grössten bewilligten Exportvolumen? 
+```{r}
+laenderSummen5Sortiert <- seco_dual_use_cleaned %>%
+  group_by(Land) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  slice(1:5)
+sum(laenderSummen5Sortiert$Wert)/sum(seco_dual_use_cleaned$Wert) * 100
+```
+
+Wie verteilt sich das Exportvolumen auf die einzelnen Verzeichnisse? 
+```{r}
+verzeichnisSummen <- seco_dual_use_cleaned  %>% 
+  group_by(Verzeichnis) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  mutate(Verzeichnis = factor(Verzeichnis, levels = Verzeichnis))
+verzeichnisSummenBar <- ggplot(data = verzeichnisSummen, aes(x = Verzeichnis, y = Wert)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Verzeichnis") +
+  theme(axis.text.x = element_text(angle=45, vjust=0.5))
+verzeichnisSummenBar
+```
+
+#### Temporale Auswertung
+
+##### Summe nach Jahr
+```{r}
+# Summe nach Jahr
+exportvolumenNachJahr <- seco_dual_use_cleaned  %>% 
+  group_by(Jahr = format(Datum, "%Y"), Verzeichnis) %>%
+  summarise(Wert = sum(Wert)) %>%
+  mutate(Verzeichnis = factor(Verzeichnis, levels = c("ML (GKV)", "GKV", "unbekannt", "ChKV", "5.1", "5.2")))
+
+exportvolumenNachJahrBar <- ggplot(data = exportvolumenNachJahr, aes(x = Jahr, y = Wert, fill = factor(Verzeichnis), order = Verzeichnis)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Jahr") +
+  scale_fill_discrete(name = "Verzeichnis")
+  
+exportvolumenNachJahrBar
+```
+
+##### Nur besondere militärische Güter (ML)
+```{r}
+# Summe nach Jahr, nur Wassenaar-Güter
+# zuerst brauchen wir die grössten fünf Kategorien
+exportvolumenML5Groesste <- seco_dual_use_cleaned %>%
+  filter(Verzeichnis == "ML (GKV)") %>%
+  group_by(Haupttyp) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  select(Haupttyp) %>%
+  slice(1:5)
+exportvolumenNachJahrML <- seco_dual_use_cleaned  %>% 
+  filter(Verzeichnis == "ML (GKV)") %>%
+  group_by(Jahr = format(Datum, "%Y"), Haupttyp) %>%
+  summarise(Wert = sum(Wert)) %>%
+  mutate(Haupttyp = ifelse(Haupttyp %in% as.data.frame(exportvolumenML5Groesste)[,1], as.character(Haupttyp), "andere")) %>%
+  mutate(Haupttyp = factor(Haupttyp, levels = c(as.character(as.data.frame(exportvolumenML5Groesste)[,1]), "andere")))
+
+exportvolumenNachJahrMLBar <- ggplot(data = exportvolumenNachJahrML, aes(x = Jahr, y = Wert, fill = factor(Haupttyp), order = Haupttyp)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Jahr") +
+  scale_fill_discrete(name = "Haupttyp")
+exportvolumenNachJahrMLBar
+```
+
+##### Nur Dual-Use (GKV)
+```{r}
+# Summe nach Jahr, nur GKV
+# zuerst brauchen wir die grössten fünf Kategorien
+exportvolumenGKV5Groesste <- seco_dual_use_cleaned %>%
+  filter(Verzeichnis == "GKV") %>%
+  group_by(Haupttyp) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  select(Haupttyp) %>%
+  slice(1:5)
+exportvolumenNachJahrGKV <- seco_dual_use_cleaned  %>% 
+  filter(Verzeichnis == "GKV") %>%
+  group_by(Jahr = format(Datum, "%Y"), Haupttyp) %>%
+  summarise(Wert = sum(Wert)) %>%
+  mutate(Haupttyp = ifelse(Haupttyp %in% as.data.frame(exportvolumenGKV5Groesste)[,1], as.character(Haupttyp), "andere")) %>%
+  mutate(Haupttyp = factor(Haupttyp, levels = c(as.character(as.data.frame(exportvolumenGKV5Groesste)[,1]), "andere")))
+
+exportvolumenNachJahrGKVBar <- ggplot(data = exportvolumenNachJahrGKV, aes(x = Jahr, y = Wert, fill = factor(Haupttyp), order = Haupttyp)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Jahr") +
+  scale_fill_discrete(name = "Haupttyp")
+exportvolumenNachJahrGKVBar
+```
+
+```{r}
+# Summe nach Jahr, nur GKVKat2UnterkatB
+# zuerst brauchen wir die grössten fünf Kategorien
+exportvolumenGKVKat2UnterkatB5Groesste <- seco_dual_use_cleaned %>%
+  filter(Verzeichnis == "GKV", Haupttyp == "2") %>%
+  group_by(Untertyp) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  select(Untertyp) %>%
+  slice(1:5)
+exportvolumenNachJahrGKVKat2UnterkatB <- seco_dual_use_cleaned  %>% 
+  filter(Verzeichnis == "GKV", Haupttyp == "2") %>%
+  group_by(Jahr = format(Datum, "%Y"), Untertyp) %>%
+  summarise(Wert = sum(Wert)) %>%
+  mutate(Untertyp = ifelse(Untertyp %in% as.data.frame(exportvolumenGKVKat2UnterkatB5Groesste)[,1], as.character(Untertyp), "andere")) %>%
+  mutate(Untertyp = factor(Untertyp, levels = c(as.character(as.data.frame(exportvolumenGKVKat2UnterkatB5Groesste)[,1]), "andere")))
+
+exportvolumenNachJahrGKVKat2UnterkatBBar <- ggplot(data = exportvolumenNachJahrGKVKat2UnterkatB, aes(x = Jahr, y = Wert, fill = factor(Untertyp), order = Untertyp)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Jahr") +
+  scale_fill_discrete(name = "Untertyp")
+exportvolumenNachJahrGKVKat2UnterkatBBar
+```
+
+Eine noch genauere Aufschlüsselung ist angezeigt:
+
+```{r}
+# Summe nach Jahr, nur GKVKat2UnterkatB
+# zuerst brauchen wir die grössten fünf Kategorien
+exportvolumenGKVKat25Groesste <- seco_dual_use_cleaned %>%
+  filter(Verzeichnis == "GKV", Haupttyp == "2", Untertyp == "B") %>%
+  group_by(Zusatz) %>%
+  summarise(Wert = sum(Wert)) %>%
+  arrange(desc(Wert)) %>%
+  select(Zusatz) %>%
+  slice(1:5)
+exportvolumenNachJahrGKVKat2 <- seco_dual_use_cleaned  %>% 
+  filter(Verzeichnis == "GKV", Haupttyp == "2", Untertyp == "B") %>%
+  group_by(Jahr = format(Datum, "%Y"), Zusatz) %>%
+  summarise(Wert = sum(Wert)) %>%
+  mutate(Zusatz = ifelse(Zusatz %in% as.data.frame(exportvolumenGKVKat25Groesste)[,1], as.character(Zusatz), "andere")) %>%
+  mutate(Zusatz = factor(Zusatz, levels = c(as.character(as.data.frame(exportvolumenGKVKat25Groesste)[,1]), "andere")))
+
+exportvolumenNachJahrGKVKat2Bar <- ggplot(data = exportvolumenNachJahrGKVKat2, aes(x = Jahr, y = Wert, fill = factor(Zusatz), order = Zusatz)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(labels = formatAsChf) + 
+  xlab("Jahr") +
+  scale_fill_discrete(name = "Zusatz")
+exportvolumenNachJahrGKVKat2Bar
+```
+

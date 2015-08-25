@@ -1,0 +1,137 @@
+$icon-font-path: "bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// import bootstrap adapted for srfdata
+@import "adapted-bootstrap";
+// import a custom build of bootstrap that contains only the necessary stuff
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+// endbower
+@import "srf-font-definitions";
+@import "srfdata";
+/* Charts */
+
+.seco-chart {
+    // height: 300px;
+}
+
+#seco-datum {
+    .foreground.bars {
+        fill: palette(srf-red, base);
+    }
+}
+
+.seco-chart.narrow {
+    padding-bottom: $padding-small;
+}
+
+#seco-kategorie-legend {
+    font: $font-arial-for-legend;
+    text-align: right;
+    p {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+#seco-land-legend {
+    font: $font-arial-for-legend;
+    p {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+#seco-datum.seco-chart {
+    height: 264px;
+}
+
+#seco-catchphrase {
+    min-height: 120px;
+    h1 {
+        font: $font-catchphrase;
+        color: palette(srf-monochrome, darker);
+        margin: 0;
+    }
+    span {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+    span.date {
+        background-color: palette(srf-red, base);
+    }
+    span.category {
+        background-color: palette(srf-yellow, base);
+    }
+    span.country {
+        background-color: palette(srf-orange, base);
+    }
+    span.volume {
+        background-color: #C2BEB5;
+        color: palette(srf-monochrome, darker);
+        // text-decoration: underline;
+        white-space: nowrap;
+    }
+}
+
+#seco-tabelle {
+    td.date {
+        width: 90px;
+        div {
+            width: 70px; // subtract padding-left + padding-right
+        }
+    }
+    td.land {
+        width: 160px;
+        div {
+            width: 140px;
+        }
+    }
+    td.verzeichnishaupttyp {
+        width: 190px;
+        div {
+            width: 170px;
+        }
+    }
+    td.wert {
+        width: 152px;
+        div {
+            float: right;
+            width: 132px;
+        }
+    }
+}
+
+#seco-land.seco-chart {
+    div.bar {
+        div.foreground {
+            background-color: palette(srf-orange, base);
+        }
+        div.foreground.active {
+            background-color: palette(srf-orange, highlight);
+        }
+    }
+}
+
+#seco-kategorie.seco-chart {
+    div.bar {
+        div.foreground {
+            background-color: palette(srf-yellow, base);
+        }
+        div.foreground.active {
+            background-color: palette(srf-yellow, highlight);
+        }
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+    .col-sm-4 {
+        .srfdata-button {
+            margin-bottom: $padding-small;
+        }
+    }
+}
+
+@media (max-width: 360px) {
+    #seco-catchphrase {
+        min-height: 200px
+    }
+}
