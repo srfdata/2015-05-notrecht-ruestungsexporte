@@ -19,7 +19,7 @@ Die Vorprozessierung und Analyse wurde im Statistikprogramm R vorgenommen. Die E
 
 #### R-Script
 
-Das zugrunde liegende Script kann unter [diesem Link](http://srfdata.github.io/1503-seco-dual-use-goods/rscript.zip) heruntergeladen werden. Durch Ausführen von `preprocessing.Rmd` kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner `input` eingelesen und Ergebnisse in den Ordner `output` geschrieben. 
+Das zugrunde liegende Script kann unter [diesem Link](http://srfdata.github.io/2015-05-notrecht-ruestungsexporte/rscript.zip) heruntergeladen werden. Durch Ausführen von `preprocessing.Rmd` kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner `input` eingelesen und Ergebnisse in den Ordner `output` geschrieben. 
 
 #### Haftungsauschluss
 
