@@ -4,7 +4,7 @@ cp -r analysis tmp
 # switch to gh-pages branch
 git checkout gh-pages
 # copy over index file (the processed preprocessing.Rmd) from master branch
-cp tmp/analysis.html index.html
+cp tmp/preprocessing.html index.html
 # clean
 rm -rf rscript/
 mkdir rscript
