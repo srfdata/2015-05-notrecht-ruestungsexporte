@@ -80,7 +80,7 @@ img {
 </ul>
 <div id="r-script" class="section level4">
 <h4>R-Script</h4>
-<p>Das zugrunde liegende Script kann unter <a href="http://srfdata.github.io/1503-seco-dual-use-goods/rscript.zip">diesem Link</a> heruntergeladen werden. Durch Ausführen von <code>preprocessing.Rmd</code> kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner <code>input</code> eingelesen und Ergebnisse in den Ordner <code>output</code> geschrieben.</p>
+<p>Das zugrunde liegende Script kann unter <a href="http://srfdata.github.io/2015-05-notrecht-ruestungsexporte/rscript.zip">diesem Link</a> heruntergeladen werden. Durch Ausführen von <code>preprocessing.Rmd</code> kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner <code>input</code> eingelesen und Ergebnisse in den Ordner <code>output</code> geschrieben.</p>
 </div>
 <div id="haftungsauschluss" class="section level4">
 <h4>Haftungsauschluss</h4>
@@ -499,47 +499,47 @@ seco_dual_use_cleaned &lt;- seco_dual_use  %&gt;%
 seco_dual_use_cleaned  %&gt;% 
   sample_n(40) %&gt;%
   select(Verzeichnis, Signatur, Haupttyp, Untertyp, Zusatz)</code></pre>
-<pre><code>##      Verzeichnis             Signatur Haupttyp Untertyp  Zusatz
-## 4353         GKV              2B201b1        2        B   201b1
-## 4223         5.1                  5.1        1     &lt;NA&gt;    &lt;NA&gt;
-## 4179         5.1                  5.1        1     &lt;NA&gt;    &lt;NA&gt;
-## 1144         GKV              2B201a1        2        B   201a1
-## 2173         GKV               2B001a        2        B    001a
-## 2070         GKV               2B352b        2        B    352b
-## 2116         GKV               3B001e        3        B    001e
-## 1651         5.2                  5.2        2     &lt;NA&gt;    &lt;NA&gt;
-## 90           GKV 2B001.b.2\n2B201.a.1        2        B   001b2
-## 4284         GKV     2B201b1\n2B001c1        2        B   201b1
-## 2266         GKV               2B001a        2        B    001a
-## 1333         GKV        2B120\n7B003a        2        B     120
-## 1441         GKV              1B231b2        1        B   231b2
-## 592          5.1                  5.1        1     &lt;NA&gt;    &lt;NA&gt;
-## 1976    ML (GKV)                   1d        1        d    &lt;NA&gt;
-## 2308         GKV                2D002        2        D     002
-## 5134         GKV            6A005a6b2        6        A 005a6b2
-## 5096         GKV       2B201b\n2B001c        2        B    201b
-## 5292         GKV      2B201b\n2B001c1        2        B    201b
-## 4861         GKV               2B001a        2        B    001a
-## 78      ML (GKV)               ML04.c        4        c    &lt;NA&gt;
-## 1447    ML (GKV)                 10c2       10       c2    &lt;NA&gt;
-## 1043    ML (GKV)                   11       11     &lt;NA&gt;    &lt;NA&gt;
-## 3403         GKV               5A001f        5        A    001f
-## 2703         GKV             3A001a2c        3        A  001a2c
-## 495          GKV              2B201.a        2        B    201a
-## 2785         5.1                  5.1        1     &lt;NA&gt;    &lt;NA&gt;
-## 5451         GKV               2B001a        2        B    001a
-## 5426         GKV               2B201b        2        B    201b
-## 2332         GKV              6A002c1        6        A   002c1
-## 1806    ML (GKV)                    4        4     &lt;NA&gt;    &lt;NA&gt;
-## 448          5.1                  5.1        1     &lt;NA&gt;    &lt;NA&gt;
-## 3552         GKV     2B201a1\n2B001b2        2        B   201a1
-## 777     ML (GKV)           ML10\nML22       10     &lt;NA&gt;    &lt;NA&gt;
-## 2128         5.1                  5.1        1     &lt;NA&gt;    &lt;NA&gt;
-## 5182         GKV               2B001a        2        B    001a
-## 2117         GKV     2B201a1\n2B001b2        2        B   201a1
-## 130          GKV             6A002.c1        6        A   002c1
-## 2519    ML (GKV)                   6a        6        a    &lt;NA&gt;
-## 4685         GKV                7A105        7        A     105</code></pre>
+<pre><code>##      Verzeichnis           Signatur Haupttyp Untertyp  Zusatz
+## 1597         GKV           5A002a1a        5        A  002a1a
+## 5447         GKV    2B201b1\n2B001c        2        B   201b1
+## 348          GKV          5A002.a1a        5        A  002a1a
+## 2962         GKV          6A005a6b2        6        A 005a6b2
+## 3090         5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 5432         GKV             2B001a        2        B    001a
+## 4512    ML (GKV)                 1a        1        a    &lt;NA&gt;
+## 1456         GKV            2B201a1        2        B   201a1
+## 862          5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 3656         GKV          6A005a6b2        6        A 005a6b2
+## 2489         GKV   2B201a1\n2B001b2        2        B   201a1
+## 5011         GKV           3A001a2c        3        A  001a2c
+## 5203         GKV             2B001a        2        B    001a
+## 903          GKV           3A001a2c        3        A  001a2c
+## 510          GKV 2B001.b2\n2B201.a1        2        B   001b2
+## 517          GKV            5A001.i        5        A    001i
+## 1923         GKV            6A002c1        6        A   002c1
+## 2004         GKV   2B201a1\n2B001b2        2        B   201a1
+## 4539         5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 2972         5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 344          5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 4858         GKV             2B001a        2        B    001a
+## 2439   unbekannt          unbekannt     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;
+## 3472         GKV            6A002c1        6        A   002c1
+## 5553         GKV             3A228c        3        A    228c
+## 634          5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 71           GKV 2B001.b2\n2B201.a1        2        B   001b2
+## 2908         GKV            2B350g2        2        B   350g2
+## 3939   unbekannt          unbekannt     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;
+## 2472         GKV             2B001a        2        B    001a
+## 319          GKV           2B350.i4        2        B   350i4
+## 3146         GKV     2B201a\n2B001b        2        B    201a
+## 1030         GKV          6A005a6b2        6        A 005a6b2
+## 5195   unbekannt          unbekannt     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;
+## 1867    ML (GKV)                 11       11     &lt;NA&gt;    &lt;NA&gt;
+## 1965    ML (GKV)                 3a        3        a    &lt;NA&gt;
+## 598          5.1                5.1        1     &lt;NA&gt;    &lt;NA&gt;
+## 2005         GKV            2B201b1        2        B   201b1
+## 2420         GKV           6A002a3f        6        A  002a3f
+## 935          GKV            6A003b4        6        A   003b4</code></pre>
 <pre class="r"><code># Faktorenlevels überprüfen
 levels(seco_dual_use_cleaned$Verzeichnis)</code></pre>
 <pre><code>## [1] &quot;5.1&quot;       &quot;5.2&quot;       &quot;ChKV&quot;      &quot;GKV&quot;       &quot;ML (GKV)&quot;  &quot;unbekannt&quot;</code></pre>
