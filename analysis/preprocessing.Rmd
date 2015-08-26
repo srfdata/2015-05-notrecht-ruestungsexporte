@@ -21,7 +21,7 @@ Die Vorprozessierung und Analyse wurde im Statistikprogramm R vorgenommen. Die E
 
 Das zugrunde liegende Script kann unter [diesem Link](http://srfdata.github.io/2015-05-notrecht-ruestungsexporte/rscript.zip) heruntergeladen werden. Durch Ausführen von `preprocessing.Rmd` kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner `input` eingelesen und Ergebnisse in den Ordner `output` geschrieben. 
 
-#### Haftungsauschluss
+#### Haftungsausschluss
 
 Die veröffentlichten Informationen sind sorgfältig zusammengestellt, erheben aber keinen Anspruch auf Aktualität, Vollständigkeit oder Richtigkeit. Es wird keine Haftung übernommen für Schäden, die  durch die Verwendung dieses Scripts oder der daraus gezogenen Informationen entstehen. Dies gilt ebenfalls für Inhalte Dritter, die über dieses Angebot zugänglich sind. 
 
