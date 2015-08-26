@@ -17,9 +17,13 @@ Die [Visualisierung](http://www.srfcdn.ch/srf-data/data/2015/seco-dual-use/) wur
 
 #### Befehle
 
+* `cd frontend` - Ins Verzeichnis wechseln
+
 * `npm install` - Installiert alle benötigten Node-Packages
 
 * `npm install node-sass && npm install grunt-sass` - Diese beiden Packages müssen wegen einem Fehler in `node-sass` manuell installiert werden
+
+* `npm dedupe` - Ausführen, um später Problemen mit `grunt-watch` vorzubeugen
 
 * `bower install` - Installiert alle benötigten Frontend-Dependencies
 
