@@ -10,6 +10,6 @@
     "fontawesome": "~4.3.0",
     "sprintf": "~1.0.2",
     "lodash": "~3.5.0",
-    "Tocca.js": "~0.1.21"
+    "Tocca.js": "~0.1.7"
   }
 }
