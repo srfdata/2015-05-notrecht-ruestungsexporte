@@ -17,9 +17,11 @@ Die [Visualisierung](http://www.srfcdn.ch/srf-data/data/2015/seco-dual-use/) wur
 
 #### Befehle
 
-* `npm install && bower install` - Installiert alle Dependencies
+* `npm install` - Installiert alle benötigten Node-Packages
 
 * `npm install node-sass && npm install grunt-sass` - Diese beiden Packages müssen wegen einem Fehler in `node-sass` manuell installiert werden
+
+* `bower install` - Installiert alle benötigten Frontend-Dependencies
 
 * `grunt serve` - Startet einen Entwicklungsserver auf localhost:8000
 
