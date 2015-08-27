@@ -17,13 +17,17 @@ Die Vorprozessierung und Analyse wurde im Statistikprogramm R vorgenommen. Die E
 * `output/seco_dual_use_for_vis.csv`: Wird für die Visualisierung verwendet, reduzierte Menge von Attributen
 * `output/seco_dual_use.csv`: Vollständiger Datensatz, der zum Download angeboten wird. Dieser Datensatz wird im folgenden Kapitel beschrieben. 
 
-#### R-Script
+#### R-Script & Daten
 
-Das zugrunde liegende Script kann unter [diesem Link](http://srfdata.github.io/2015-05-notrecht-ruestungsexporte/rscript.zip) heruntergeladen werden. Durch Ausführen von `preprocessing.Rmd` kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner `input` eingelesen und Ergebnisse in den Ordner `output` geschrieben. 
+Das zugrunde liegende Script sowie die prozessierten Daten können unter [diesem Link](http://srfdata.github.io/2015-05-notrecht-ruestungsexporte/rscript.zip) heruntergeladen werden. Durch Ausführen von `preprocessing.Rmd` kann der hier beschriebene Prozess nachvollzogen und dieses Dokument generiert werden. Dabei werden Daten aus dem Ordner `input` eingelesen und Ergebnisse in den Ordner `output` geschrieben. 
 
 #### GitHub
 
 Der Code für die vorliegende Datenprozessierung und die [Visualisierung](http://www.srfcdn.ch/srf-data/data/2015/seco-dual-use/) ist unter [http://github.com/srfdata/2015-05-notrecht-ruestungsexporte](http://github.com/srfdata/2015-05-notrecht-ruestungsexporte) zur freien Verwendung verfügbar. 
+
+#### Lizenz
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Dataset" property="dct:title" rel="dct:type">2015-05-notrecht-ruestungsexporte</span> von <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/srfdata/2015-05-notrecht-ruestungsexporte" property="cc:attributionName" rel="cc:attributionURL">SRF Data</a> ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Namensnennung - Nicht-kommerziell - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.
 
 #### Weitere Projekte
 
