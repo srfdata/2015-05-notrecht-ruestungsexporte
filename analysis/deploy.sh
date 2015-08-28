@@ -12,6 +12,7 @@ mkdir rscript
 cp tmp/classify.r rscript
 cp tmp/numberFormatter.r rscript
 cp tmp/preprocessing.Rmd rscript
+cp index.html rscript
 mkdir rscript/output
 # copy over other nessecary output files from master branch
 cp tmp/output/verzeichnis_beschreibung.csv rscript/output/
